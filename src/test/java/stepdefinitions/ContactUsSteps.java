@@ -1,4 +1,4 @@
-package parallel;
+package stepdefinitions;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,6 +9,7 @@ import org.testng.Assert;
 
 import com.pages.ContactUsPage;
 import com.qa.factory.DriverFactory;
+import com.qa.util.ConfigReader;
 import com.qa.util.ExcelReader;
 
 import io.cucumber.java.en.Given;
@@ -18,10 +19,10 @@ import io.cucumber.java.en.When;
 public class ContactUsSteps {
 	
 	private ContactUsPage contactUsPage = new ContactUsPage(DriverFactory.getDriver());
-
+	private ConfigReader configreader = new ConfigReader();
 	@Given("user navigates to contact us page")
 	public void user_navigates_to_contact_us_page() {
-		DriverFactory.getDriver().get("http://automationpractice.com/index.php?controller=contact");
+		DriverFactory.getDriver().get(configreader.init_prop().getProperty("Base_Url"));
 	}
 
 	@When("user fills the form from given sheetname {string} and rownumber {int}")
@@ -29,7 +30,7 @@ public class ContactUsSteps {
 		
 		ExcelReader reader = new ExcelReader();
 		List<Map<String,String>> testData = 
-				reader.getData("/Users/naveenautomationlabs/Desktop/automation.xlsx", sheetName);
+				reader.getData(configreader.init_prop().getProperty("AutomationDataSheet"), sheetName);
 		
 		String heading = testData.get(rowNumber).get("subjectheading");
 		String email = testData.get(rowNumber).get("email");
